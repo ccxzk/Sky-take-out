@@ -155,6 +155,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .sex(employeeDTO.getSex())
                 .idNumber(employeeDTO.getIdNumber())
                 .phone(employeeDTO.getPhone())
+                .updateTime(LocalDateTime.now()) //设置更新时间
                 .build();
 
         employeeMapper.update(employee);
