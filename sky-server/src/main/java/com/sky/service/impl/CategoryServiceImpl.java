@@ -60,10 +60,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .type(categoryDTO.getType())
                 .name(categoryDTO.getName())
                 .sort(categoryDTO.getSort())
-                .createTime(LocalDateTime.now()) // 创建时间
-                .updateTime(LocalDateTime.now()) // 更新时间
-                .createUser(BaseContext.getCurrentId()) // 创建人
-                .updateUser(BaseContext.getCurrentId()) // 更新人
                 .build();
 
         categoryMapper.save(category);
@@ -95,7 +91,6 @@ public class CategoryServiceImpl implements CategoryService {
                 .id(categoryDTO.getId())
                 .name(categoryDTO.getName())
                 .sort(categoryDTO.getSort())
-                .updateTime(LocalDateTime.now()) // 更新时间
                 .build();
 
         categoryMapper.update(category);
