@@ -17,7 +17,4 @@ public interface DishMapper {
     void addDish(Dish dish);
 
 
-    @Insert("insert into dish_flavor(dish_id,name,value) values (#{dishId},#{name},#{value})")
-    void addDishFlavor(DishFlavor dishFlavor);
-
 }

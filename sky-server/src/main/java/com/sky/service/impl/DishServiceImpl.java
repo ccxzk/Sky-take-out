@@ -5,6 +5,7 @@ import com.sky.constant.StatusConstant;
 import com.sky.dto.DishDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.service.DishService;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +18,9 @@ import java.util.List;
 public class DishServiceImpl implements DishService {
     @Resource
     private DishMapper dishMapper;
+
+    @Resource
+    private DishFlavorMapper dishFlavorMapper;
 
     /**
      * 新增菜品
@@ -36,7 +40,7 @@ public class DishServiceImpl implements DishService {
         if(flavors != null && !flavors.isEmpty()) {
             for (DishFlavor dishFlavor : flavors) {
                 dishFlavor.setDishId(dish.getId());
-                dishMapper.addDishFlavor(dishFlavor);
+                dishFlavorMapper.addDishFlavor(dishFlavor);
             }
         }
     }
