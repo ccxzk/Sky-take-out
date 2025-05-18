@@ -10,4 +10,10 @@ public class StatusConstant {
 
     //禁用
     public static final Integer DISABLE = 0;
+
+    //存在
+    public static final Integer ISEXISTED = 1;
+
+    //不存在
+    public static final Integer ISNOTEXISTED  = 0;
 }

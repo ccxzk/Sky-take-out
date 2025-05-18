@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.DishFlavorMapper">
+    <insert id="addBatchDishFlavor" >
+        insert into dish_flavor (dish_id, name, value) values
+        <foreach collection="dishFlavors" item="item" separator=",">
+            (#{item.dishId},#{item.name},#{item.value})
+        </foreach>
+    </insert>
+
+    <delete id="deleteBatchByDishId">
+        delete from dish_flavor
+        <where>
+            <if test="list != null and list.size() > 0">
+                dish_id in
+                <foreach item="id" collection="dishIds" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="list == null or list.size() == 0">
+                1 = 0
+            </if>
+        </where>
+    </delete>
+
+
+</mapper>
