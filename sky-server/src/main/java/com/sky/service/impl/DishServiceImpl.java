@@ -10,7 +10,7 @@ import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
-import com.sky.mapper.SetMealDishMapper;
+import com.sky.mapper.SetMealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
@@ -18,8 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -31,7 +29,7 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
 
     @Resource
-    private SetMealDishMapper setMealDishMapper;
+    private SetMealMapper setMealMapper;
 
     /**
      * 新增菜品
@@ -118,7 +116,7 @@ public class DishServiceImpl implements DishService {
             Dish dish = dishMapper.getById(id);
             if(dish.getStatus().equals(StatusConstant.ENABLE)){
                 throw new RuntimeException(dish.getName() + MessageConstant.DISH_ON_SALE);
-            } else if (setMealDishMapper.getBySetMealId(id) == StatusConstant.ISEXISTED) {
+            } else if (setMealMapper.getBySetMealId(id) == StatusConstant.ISEXISTED) {
                 throw new RuntimeException(dish.getName() + MessageConstant.DISH_BE_RELATED_BY_SETMEAL);
             }
         }
@@ -166,4 +164,21 @@ public class DishServiceImpl implements DishService {
 
         dishMapper.update(dish);
     }
+
+    /**
+     * 获取菜品列表
+     * @param categoryId
+     * @param name
+     * @return
+     */
+    @Override
+    public List<Dish> list(Long categoryId, String name) {
+        Dish dish = Dish.builder()
+                .categoryId(categoryId)
+                .name(name)
+                .build();
+        return dishMapper.list(dish);
+    }
+
+
 }
