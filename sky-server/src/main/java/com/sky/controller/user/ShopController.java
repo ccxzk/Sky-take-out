@@ -1,4 +1,4 @@
-package com.sky.controller.admin;
+package com.sky.controller.user;
 
 import com.sky.result.Result;
 import io.swagger.annotations.Api;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
-@RestController("adminShopController")
-@RequestMapping("/admin/shop")
+@RestController("userShopController")
+@RequestMapping("/user/shop")
 @Api(tags = "店铺相关接口")
 @Slf4j
 public class ShopController {
