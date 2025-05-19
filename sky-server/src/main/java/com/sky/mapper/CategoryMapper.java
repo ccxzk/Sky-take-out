@@ -28,6 +28,5 @@ public interface CategoryMapper {
     @AutoFill(OperationType.UPDATE)
     void update(Category category);
 
-    @Select("select * from category where type = #{type} order by sort")
     List<Category> list(Integer type);
 }

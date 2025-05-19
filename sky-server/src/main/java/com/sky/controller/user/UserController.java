@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.sky.constant.JwtClaimsConstant;
 import com.sky.constant.MessageConstant;
 import com.sky.dto.UserLoginDTO;
 import com.sky.entity.User;
@@ -44,6 +45,7 @@ public class UserController {
 
         //为用户提供jwt令牌
         Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID, user.getId());
         String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
 
         //封装用户信息和token
