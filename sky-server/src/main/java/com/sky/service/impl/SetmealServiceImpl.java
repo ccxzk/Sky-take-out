@@ -2,13 +2,11 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
-import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
-import com.sky.mapper.SetMealMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.SetmealService;
 import com.sky.vo.DishItemVO;
@@ -24,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class SetmealServiceImpl implements SetmealService {
     @Resource
-    SetMealMapper setMealMapper;
+    SetmealMapper setMealMapper;
 
     /**
      * 分页查询
