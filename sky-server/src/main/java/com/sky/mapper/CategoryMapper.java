@@ -29,4 +29,7 @@ public interface CategoryMapper {
     void update(Category category);
 
     List<Category> list(Integer type);
+
+    @Select("select * from category where type = #{type} order by sort asc")
+    List<Category> getCategoryById(Integer type);
 }

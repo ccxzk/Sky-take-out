@@ -100,7 +100,7 @@ public class CategoryController {
     @ApiOperation("根据类型查询分类")
     public Result<List<Category>> list(@RequestParam Integer type) {
         log.info("查询所有分类");
-        List<Category> list = categoryService.list(type);
+        List<Category> list = categoryService.getCategoryById(type);
         return Result.success(list);
     }
 

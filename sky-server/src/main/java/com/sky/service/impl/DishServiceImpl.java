@@ -51,8 +51,9 @@ public class DishServiceImpl implements DishService {
             for (DishFlavor dishFlavor : flavors) {
                 dishFlavor.setDishId(dish.getId());
             }
+            dishFlavorMapper.addBatchDishFlavor(flavors);
         }
-        dishFlavorMapper.addBatchDishFlavor(flavors);
+
     }
 
     /**
@@ -205,6 +206,7 @@ public class DishServiceImpl implements DishService {
 
         return dishVOList;
     }
+
 }
 
 
