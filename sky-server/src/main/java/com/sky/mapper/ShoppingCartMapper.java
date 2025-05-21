@@ -34,6 +34,12 @@ public interface ShoppingCartMapper {
     void add(ShoppingCart shoppingCart);
 
     /**
+     * 批量插入购物车数据
+     * @param shoppingCartList
+     */
+    void addBatch(List<ShoppingCart> shoppingCartList);
+
+    /**
      * 删除购物车数据
      * @param userId
      */

@@ -4,6 +4,7 @@ import com.sky.dto.ShoppingCartDTO;
 import com.sky.entity.ShoppingCart;
 import com.sky.result.Result;
 import com.sky.service.ShoppingCartService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user/shoppingCart")
-@ApiOperation("用户购物车接口")
+@Api(tags = "用户购物车接口")
 public class ShoppingCartController {
     @Resource
     private ShoppingCartService shoppingCartService;
