@@ -40,6 +40,17 @@ public interface AddressBookMapper {
     @Select("select * from address_book where id = #{id}")
     AddressBook getById(Long id);
 
+    /**
+     * 根据id删除地址
+     * @param id
+     */
     @Delete("delete from address_book where id = #{id}")
     void deleteById(Long id);
+
+    /**
+     * 查询默认地址
+     * @return
+     */
+    @Select("select * from address_book where user_id = #{userId} and is_default = 1")
+    AddressBook getByDefault(Long userId);
 }

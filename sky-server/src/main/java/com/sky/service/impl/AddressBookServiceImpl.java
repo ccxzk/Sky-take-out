@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.sky.context.BaseContext;
 import com.sky.entity.AddressBook;
 import com.sky.mapper.AddressBookMapper;
 import com.sky.service.AddressBookService;
@@ -66,6 +67,12 @@ public class AddressBookServiceImpl implements AddressBookService {
     @Override
     public void update(AddressBook addressBook) {
         addressBookMapper.update(addressBook);
+    }
+
+    @Override
+    public AddressBook getByDefault() {
+        Long userId = BaseContext.getCurrentId();
+        return addressBookMapper.getByDefault(userId);
     }
 
 

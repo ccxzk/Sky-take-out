@@ -88,6 +88,13 @@ public class AddressBookController {
         return Result.success();
     }
 
+    @GetMapping("/default")
+    @ApiOperation("查询默认地址")
+    public Result<AddressBook> getDefault() {
+        AddressBook list = addressBookService.getByDefault();
+        return Result.success(list);
+    }
+
     @DeleteMapping
     @ApiOperation("删除地址")
     public Result delete(@RequestParam Long id){
