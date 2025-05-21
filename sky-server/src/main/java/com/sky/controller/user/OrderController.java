@@ -30,10 +30,4 @@ public class OrderController {
         OrderSubmitVO orderSubmitVO = orderService.submitOrder(ordersSubmitDTO);
         return Result.success(orderSubmitVO);
     }
-
-    @PutMapping("/payment")
-    @ApiOperation("用户支付")
-    public Result<String> pay(@RequestBody OrdersPaymentDTO ordersPaymentDTO){
-
-    }
 }
