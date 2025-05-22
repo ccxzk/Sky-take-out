@@ -11,12 +11,14 @@ import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
 import com.sky.entity.ShoppingCart;
 import com.sky.exception.AddressBookBusinessException;
+import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.AddressBookMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.ShoppingCartMapper;
 import com.sky.result.PageResult;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.aspectj.weaver.ast.Or;
@@ -165,17 +167,29 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * 取消订单
-     * @param id
+     * @param orders
      */
     @Override
-    public void cancel(Long id) {
-        Orders orders = Orders.builder()
-                .id(id) // 订单id
-                .status(Orders.CANCELLED) // 设置订单状态为取消
-                .build();
+    public void cancel(Orders orders) {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(orders.getId());
+
+        // 校验订单是否存在
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        // 更新订单状态、取消时间
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelTime(LocalDateTime.now());
+
         orderMapper.update(orders);
     }
 
+    /**
+     * 再来一单
+     * @param id
+     */
     @Override
     public void repetition(Long id) {
         // 获取当前用户id
@@ -199,4 +213,111 @@ public class OrderServiceImpl implements OrderService {
         //批量插入购物车
         shoppingCartMapper.addBatch(shoppingCartList);
     }
+
+    /**
+     * 条件搜索订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        // 获取用户id
+        Long userId = ordersPageQueryDTO.getUserId();
+
+        // 先用PageHelper动态拦截，设置分页参数
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+
+        // 分页查询
+        Page<Orders> page = orderMapper.conditionSearch(ordersPageQueryDTO);
+
+        // 根据用户id查询订单详情
+         List<OrderVO> orderVOList = page.getResult().stream().map(x -> {
+             List<OrderDetail> orderDetailList = orderMapper.getOrderDetailById(x.getId());
+             OrderVO orderVO = new OrderVO();
+             BeanUtils.copyProperties(x, orderVO);
+             orderVO.setOrderDetailList(orderDetailList);
+             return orderVO;
+         }).collect(Collectors.toList());
+
+         //封装结果集
+         PageResult pageResult = new PageResult();
+         pageResult.setTotal(page.getTotal());
+         pageResult.setRecords(orderVOList);
+
+
+        return pageResult;
+    }
+
+    /**
+     * 订单拒绝
+     * @param orders
+     */
+    @Override
+    public void rejection(Orders orders) {
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelTime(LocalDateTime.now());
+        orders.setCancelReason("商家取消");
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 订单确认
+     * @param orders
+     */
+    @Override
+    public void confirm(Orders orders) {
+        orders.setStatus(Orders.CONFIRMED);
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 订单派送
+     * @param id
+     */
+    @Override
+    public void delivery(Long id) {
+        // 根据id查询订单
+        Orders orders = orderMapper.getById(id);
+
+        // 校验订单是否存在，并且状态为3
+        if (orders == null || !orders.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //设置派送状态，并更新订单信息
+        orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 订单完成
+     * @param id
+     */
+    @Override
+    public void complete(Long id) {
+        // 根据id查询订单
+        Orders orders = orderMapper.getById(id);
+
+        // 校验订单是否存在，并且状态为4
+        if (orders == null || !orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+
+        //设置状态、派送时间、并更新订单信息
+        orders.setStatus(Orders.COMPLETED);
+        orders.setDeliveryTime(LocalDateTime.now());
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 统计订单信息
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO statistics() {
+        return orderMapper.statistics();
+    }
+
+
 }

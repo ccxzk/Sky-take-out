@@ -3,6 +3,7 @@ package com.sky.controller.user;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
@@ -15,10 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 @RestController("UserOrderController")
 @RequestMapping("/user/order")
-@Api(tags = "C端订单接口")
+@Api(tags = "订单相关接口")
 @Slf4j
 public class OrderController {
     @Resource
@@ -74,10 +76,19 @@ public class OrderController {
     @PutMapping("/cancel/{id}")
     @ApiOperation("取消订单")
     public Result cancel(@PathVariable Long id) {
-        orderService.cancel(id);
+        Orders orders = Orders.builder()
+                .id(id)
+                .cancelReason("用户取消")
+                .build();
+        orderService.cancel(orders);
         return Result.success();
     }
 
+    /**
+     * 再来一单
+     * @param id
+     * @return
+     */
     @PostMapping("/repetition/{id}")
     @ApiOperation("再来一单")
     public Result repetition(@PathVariable Long id) {

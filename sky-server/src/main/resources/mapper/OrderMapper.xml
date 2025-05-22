@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.OrderMapper">
+    <resultMap id="OrderStatisticsMap" type="com.sky.vo.OrderStatisticsVO">
+        <result property="toBeConfirmed" column="waiting_accepted_count"/>
+        <result property="confirmed" column="waiting_delivered_count_count"/>
+        <result property="deliveryInProgress" column="delivered_count"/>
+    </resultMap>
+
     <insert id="insertOne" parameterType="com.sky.entity.Orders" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into orders
             (
@@ -41,6 +47,18 @@
         order by order_time desc
     </select>
 
+    <select id="conditionSearch" resultType="com.sky.entity.Orders">
+        select * from orders
+            <where>
+                <if test="number">and number like concat('%', #{number}, '%')</if>
+                <if test="phone">and phone like concat('%', #{phone}, '%')</if>
+                <if test="status">and status = #{status}</if>
+                <if test="beginTime">and order_time &gt;= #{beginTime}</if>
+                <if test="endTime">and order_time &lt;= #{endTime}</if>
+            </where>
+            order by order_time desc
+    </select>
+
     <update id="update" parameterType="com.sky.entity.Orders">
         update orders
             <set>
@@ -69,4 +87,13 @@
             </set>
         where id = #{id}
     </update>
+
+    <select id="statistics" resultMap="OrderStatisticsMap">
+        SELECT
+        COUNT(CASE WHEN status = 2 THEN 1 END) AS waiting_accepted_count,
+        COUNT(CASE WHEN status = 3 THEN 1 END) AS waiting_delivered_count_count,
+        COUNT(CASE WHEN status = 4 THEN 1 END) AS delivered_count
+        FROM orders
+    </select>
+
 </mapper>

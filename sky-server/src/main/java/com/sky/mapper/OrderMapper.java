@@ -5,6 +5,7 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -51,4 +52,17 @@ public interface OrderMapper {
     Orders getById(Long id);
 
     void update(Orders orders);
+
+    /**
+     * 条件搜索订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    Page<Orders> conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    /**
+     * 统计订单数据
+     * @return
+     */
+    OrderStatisticsVO statistics();
 }

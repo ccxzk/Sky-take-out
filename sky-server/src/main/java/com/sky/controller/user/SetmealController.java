@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController("userSetmealController")
 @RequestMapping("/user/setmeal")
-@Api(tags = "C端-套餐浏览接口")
+@Api(tags = "套餐浏览相关接口")
 public class SetmealController {
     @Resource
     private SetmealService setmealService;
