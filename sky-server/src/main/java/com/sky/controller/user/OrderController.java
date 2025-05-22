@@ -7,6 +7,7 @@ import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.service.ShoppingCartService;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
@@ -26,6 +27,8 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
+    @Resource
+    private ShoppingCartService shoppingCartService;
 
     /**
      * 用户下单
@@ -39,6 +42,7 @@ public class OrderController {
         log.info("用户下单：{}",ordersSubmitDTO);
 
         OrderSubmitVO orderSubmitVO = orderService.submitOrder(ordersSubmitDTO);
+        shoppingCartService.clean(); //下单后清空购物车
         return Result.success(orderSubmitVO);
     }
 

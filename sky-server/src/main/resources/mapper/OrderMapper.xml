@@ -119,4 +119,33 @@
         SELECT count(*) FROM user WHERE create_time &lt; #{beginTime}
     </select>
 
+    <select id="countOrderByMap" resultType="java.lang.Integer">
+        SELECT count(*) FROM orders
+            <where>
+                <if test="begin">and order_time &gt;= #{begin}</if>
+                <if test="end">and order_time &lt;= #{end}</if>
+                <if test="status">and status = #{status}</if>
+            </where>
+    </select>
+
+    <select id="getSalesTop10" resultType="com.sky.dto.GoodsSalesDTO">
+        SELECT
+            od.name AS name,
+            SUM(od.number) AS number
+        FROM
+            order_detail od
+        INNER JOIN
+            orders o ON od.order_id = o.id
+        WHERE
+            o.status = 5
+            <if test="begin != null">AND o.order_time &gt;= #{begin}</if>
+            <if test="end != null">AND o.order_time &lt;= #{end}</if>
+        GROUP BY
+            od.name
+        ORDER BY
+            number DESC
+        LIMIT 10 OFFSET 0
+    </select>
+
+
 </mapper>
