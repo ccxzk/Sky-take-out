@@ -39,6 +39,10 @@ public class MyTask {
                 }
             }
         }
+        else{
+            log.info("没有超时订单");
+        }
+
     }
 
     /**
@@ -60,6 +64,8 @@ public class MyTask {
                     orderMapper.update(orders);
                 }
             }
+        } else{
+            log.info("没有派送中的订单");
         }
     }
 }

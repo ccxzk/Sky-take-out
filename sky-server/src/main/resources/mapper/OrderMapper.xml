@@ -96,4 +96,27 @@
         FROM orders
     </select>
 
+    <select id="sumByMap" resultType="java.lang.Double">
+        SELECT SUM(amount) FROM orders
+        <where>
+            <if test="begin">and order_time &gt;= #{begin}</if>
+            <if test="end">and order_time &lt;= #{end}</if>
+            <if test="status">and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="sumUserByMap" resultType="java.lang.Integer">
+        SELECT count(*) FROM user
+        <where>
+            <if test="begin">and create_time &gt;= #{begin}</if>
+            <if test="end">and create_time &lt;= #{end}</if>
+            <if test="status">and status = #{status}</if>
+            <if test="userId">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="countByCreateTimeBefore" resultType="java.lang.Long">
+        SELECT count(*) FROM user WHERE create_time &lt; #{beginTime}
+    </select>
+
 </mapper>

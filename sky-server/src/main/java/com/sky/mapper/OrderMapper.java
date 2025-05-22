@@ -9,9 +9,13 @@ import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -73,4 +77,25 @@ public interface OrderMapper {
      */
     @Select("select * from orders where status = #{status}")
     List<Orders> getByStatus(Integer status);
+
+    /**
+     * 根据时间范围统计营业额数据
+      * @param beginTime
+     * @return
+     */
+    long countByCreateTimeBefore(LocalDateTime beginTime);
+
+    /**
+     * 根据条件统计营业额
+     * @param map
+     * @return
+     */
+    Double sumByMap(Map map);
+
+    /**
+     * 根据条件统计用户数量
+     * @param map
+     * @return
+     */
+    int sumUserByMap(Map map);
 }
