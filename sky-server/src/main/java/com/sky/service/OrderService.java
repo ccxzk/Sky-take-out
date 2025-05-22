@@ -30,4 +30,6 @@ public interface OrderService {
     void complete(Long id);
 
     OrderStatisticsVO statistics();
+
+    void reminder(Long id);
 }

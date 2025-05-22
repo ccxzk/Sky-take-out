@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
@@ -21,6 +22,7 @@ import com.sky.service.OrderService;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +31,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +46,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private AddressBookMapper addressBookMapper;
+
+    @Resource
+    private WebSocketServer webSocketServer;
 
     /**
      * 用户下单
@@ -319,5 +326,29 @@ public class OrderServiceImpl implements OrderService {
         return orderMapper.statistics();
     }
 
+    /**
+     * 订单催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        //根据id查询订单
+        Orders orders = orderMapper.getById(id);
+
+        // 校验订单是否存在，并且状态为2
+        if (orders == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        //将内容封装到Map当中
+        Map map = new HashMap();
+        map.put("type", 2);
+        map.put("orderId", orders.getId());
+        map.put("content", "订单号：" + orders.getNumber());
+
+
+        //通过WebSocket实现订单催单
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
 
 }
