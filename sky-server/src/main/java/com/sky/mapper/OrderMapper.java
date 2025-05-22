@@ -65,4 +65,12 @@ public interface OrderMapper {
      * @return
      */
     OrderStatisticsVO statistics();
+
+    /**
+     * 根据状态查询订单
+     * @param status
+     * @return
+     */
+    @Select("select * from orders where status = #{status}")
+    List<Orders> getByStatus(Integer status);
 }
