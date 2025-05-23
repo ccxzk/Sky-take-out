@@ -76,7 +76,6 @@ public interface OrderMapper {
      * @param status
      * @return
      */
-    @Select("select * from orders where status = #{status}")
     List<Orders> getByStatus(Integer status);
 
     /**

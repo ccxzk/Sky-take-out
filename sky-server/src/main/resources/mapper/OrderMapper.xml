@@ -50,11 +50,11 @@
     <select id="conditionSearch" resultType="com.sky.entity.Orders">
         select * from orders
             <where>
-                <if test="number">and number like concat('%', #{number}, '%')</if>
-                <if test="phone">and phone like concat('%', #{phone}, '%')</if>
-                <if test="status">and status = #{status}</if>
-                <if test="beginTime">and order_time &gt;= #{beginTime}</if>
-                <if test="endTime">and order_time &lt;= #{endTime}</if>
+                <if test="number != null">and number like concat('%', #{number}, '%')</if>
+                <if test="phone != null">and phone like concat('%', #{phone}, '%')</if>
+                <if test="status != null">and status = #{status}</if>
+                <if test="beginTime != null">and order_time &gt;= #{beginTime}</if>
+                <if test="endTime != null">and order_time &lt;= #{endTime}</if>
             </where>
             order by order_time desc
     </select>
@@ -99,19 +99,19 @@
     <select id="sumByMap" resultType="java.lang.Double">
         SELECT SUM(amount) FROM orders
         <where>
-            <if test="begin">and order_time &gt;= #{begin}</if>
-            <if test="end">and order_time &lt;= #{end}</if>
-            <if test="status">and status = #{status}</if>
+            <if test="begin != null">and order_time &gt;= #{begin}</if>
+            <if test="end != null">and order_time &lt;= #{end}</if>
+            <if test="status != null">and status = #{status}</if>
         </where>
     </select>
 
     <select id="sumUserByMap" resultType="java.lang.Integer">
         SELECT count(*) FROM user
         <where>
-            <if test="begin">and create_time &gt;= #{begin}</if>
-            <if test="end">and create_time &lt;= #{end}</if>
-            <if test="status">and status = #{status}</if>
-            <if test="userId">and user_id = #{userId}</if>
+            <if test="begin != null">and create_time &gt;= #{begin}</if>
+            <if test="end != null">and create_time &lt;= #{end}</if>
+            <if test="status != null">and status = #{status}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
         </where>
     </select>
 
@@ -122,9 +122,16 @@
     <select id="countOrderByMap" resultType="java.lang.Integer">
         SELECT count(*) FROM orders
             <where>
-                <if test="begin">and order_time &gt;= #{begin}</if>
-                <if test="end">and order_time &lt;= #{end}</if>
-                <if test="status">and status = #{status}</if>
+                <if test="begin != null">and order_time &gt;= #{begin}</if>
+                <if test="end != null">and order_time &lt;= #{end}</if>
+                <if test="status != null">and status = #{status}</if>
+            </where>
+    </select>
+
+    <select id="getByStatus" resultType="com.sky.entity.Orders">
+        SELECT * FROM orders
+            <where>
+                <if test="status != null">and status = #{status}</if>
             </where>
     </select>
 

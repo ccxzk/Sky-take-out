@@ -89,6 +89,10 @@ public interface SetmealMapper {
     @Select("select * from setmeal_dish where setmeal_id = #{id}")
     List<SetmealDish> getSetmealDishById(Long id);
 
+    /**
+     * 修改套餐
+     * @param setmeal
+     */
     @AutoFill(OperationType.UPDATE)
     void update(Setmeal setmeal);
 
