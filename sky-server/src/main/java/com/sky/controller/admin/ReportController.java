@@ -9,6 +9,7 @@ import com.sky.vo.UserReportVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 @RestController
@@ -86,4 +88,13 @@ public class ReportController {
         return Result.success(vo);
     }
 
+
+    @GetMapping("/export")
+    @ApiOperation("导出数据")
+    public void export(HttpServletResponse response) {
+        log.info("导出数据");
+
+        reportService.exportBusinessData(response);
+
+    }
 }

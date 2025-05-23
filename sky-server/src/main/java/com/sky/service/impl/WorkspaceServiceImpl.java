@@ -38,11 +38,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
      * @return
      */
     @Override
-    public BusinessDataVO getBusinessData() {
-        // 获取今日时间
-        LocalDateTime  begin = LocalDateTime.now().with(LocalTime.MIN);
-        LocalDateTime end = LocalDateTime.now().with(LocalTime.MAX);
-
+    public BusinessDataVO getBusinessData(LocalDateTime begin,LocalDateTime end) {
         // 封装查询条件
         Map map = new HashMap();
         map.put("begin",begin);
